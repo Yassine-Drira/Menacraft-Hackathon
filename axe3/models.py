@@ -15,11 +15,11 @@ class AccountSignals(BaseModel):
 
 class SourceRequest(BaseModel):
     url: str
-    # Optional: if omitted, scorer attempts to infer handle from social URL.
+    # Optional manual handle.
     handle: Optional[str] = None
-    # Optional manual account stats; overrides auto-enriched values when provided.
+    # Optional manual account stats.
     account: Optional[AccountSignals] = None
-    # Optional recent posts/captions; overrides auto-enriched texts when provided.
+    # Optional recent posts/captions.
     texts: Optional[List[str]] = None
 
 

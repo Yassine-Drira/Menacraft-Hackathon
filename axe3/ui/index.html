@@ -147,13 +147,6 @@
       padding: 5px 9px;
     }
 
-    .auto-fill-note {
-      margin-top: 8px;
-      font-size: 0.85rem;
-      color: #0d7a4d;
-      font-weight: 600;
-    }
-
     .score-wrap {
       display: flex;
       align-items: center;
@@ -210,57 +203,56 @@
         <h2>Analyze Source</h2>
         <label for="url">Reel / Post URL</label>
         <input id="url" type="text" placeholder="https://www.instagram.com/reel/... or any social post link">
-        <div class="auto-fill-note">✓ Account stats auto-extracted from social profile</div>
 
         <details>
-          <summary style="color: #666;">Expert override (optional​ — only if auto-extraction needs correction)</summary>
+          <summary style="color: #666;">Advanced evidence (optional)</summary>
           <div class="mt">
-            <label for="handle">Override handle</label>
+            <label for="handle">Handle (optional)</label>
             <input id="handle" type="text" placeholder="bbcnews">
           </div>
 
           <div class="row mt">
             <div>
-              <label for="age">Override account age (days)</label>
+              <label for="age">Account age (days)</label>
               <input id="age" type="number" min="0">
             </div>
             <div>
-              <label for="posts">Override posts count</label>
+              <label for="posts">Posts count</label>
               <input id="posts" type="number" min="0">
             </div>
           </div>
 
           <div class="row mt">
             <div>
-              <label for="followers">Override followers</label>
+              <label for="followers">Followers</label>
               <input id="followers" type="number" min="0">
             </div>
             <div>
-              <label for="following">Override following</label>
+              <label for="following">Following</label>
               <input id="following" type="number" min="0">
             </div>
           </div>
 
           <div class="row mt">
             <div>
-              <label for="engagement">Override engagement rate (0-1)</label>
+              <label for="engagement">Engagement rate (0-1)</label>
               <input id="engagement" type="number" min="0" max="1" step="0.001">
             </div>
             <div>
-              <label for="freq">Override posting freq/day</label>
+              <label for="freq">Posting frequency/day</label>
               <input id="freq" type="number" min="0" step="0.1">
             </div>
           </div>
 
           <div class="mt">
-            <label for="texts">Override caption samples (one per line)</label>
+            <label for="texts">Caption samples (one per line)</label>
             <textarea id="texts" placeholder="Paste 3+ recent captions or posts..."></textarea>
           </div>
         </details>
 
         <div class="mt">
           <button class="btn" id="runBtn">Analyze Now</button>
-          <div class="badge" id="apiHint">Powered by real account data extraction</div>
+          <div class="badge" id="apiHint">Checking API connection...</div>
         </div>
       </article>
 
@@ -417,9 +409,6 @@
       if (hasAccount) payload.account = account;
       if (texts.length) payload.texts = texts;
 
-      byId("runBtn").disabled = true;
-      byId("runBtn").textContent = "Analyzing...";
-
       try {
         const controller = new AbortController();
         const timer = setTimeout(() => controller.abort(), 25000);
@@ -456,9 +445,6 @@
           return;
         }
         renderError(`Could not reach API server at ${API_BASE}. Ensure backend is running on port 8002.`);
-      } finally {
-        byId("runBtn").disabled = false;
-        byId("runBtn").textContent = "Run Analysis";
       }
     }
 

@@ -4,6 +4,7 @@ Handles image loading and video frame extraction.
 """
 
 import io
+import os
 import tempfile
 from typing import List
 

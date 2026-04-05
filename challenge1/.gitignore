@@ -1,0 +1,66 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Virtual environments
+env/
+venv/
+.venv/
+venv_*/
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+pip-wheel-metadata/
+
+# PyTorch models and large binaries
+*.pth
+*.pt
+*.ckpt
+model.pth
+*.h5
+
+# Temporary / uploads
+temp_*
+temp_video.mp4
+*.tmp
+
+# Jupyter
+.ipynb_checkpoints
+
+# VSCode
+.vscode/
+*.code-workspace
+
+# JetBrains
+.idea/
+
+# Node / Frontend
+node_modules/
+dist/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Vite / build caches
+.vite/
+
+# Environment files
+.env
+.env.local
+
+# Logs
+logs/
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Misc
+*.sqlite3
+*.db

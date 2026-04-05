@@ -8,11 +8,11 @@ from typing import Dict, List, Optional
 
 
 def build_early_exit_bilan(
-    clip_score: float,
+    clip_score: dict,
     processing_time_ms: int
 ) -> Dict:
     """Build bilan for early exit case."""
-    score = int(clip_score * 100)
+    score = clip_score["display"]
 
     return {
         "score": score,
@@ -22,7 +22,7 @@ def build_early_exit_bilan(
         "flags": ["semantic_mismatch"],
         "blip_description": None,
         "entities": None,
-        "explanation": "The image and caption are semantically unrelated (CLIP similarity: {:.2f}). The visual content has no meaningful connection to the claim being made. No further analysis was necessary.".format(clip_score),
+        "explanation": "The image and caption are semantically unrelated (CLIP normalized: {:.2f}). The visual content has no meaningful connection to the claim being made. No further analysis was necessary.".format(clip_score["normalized"]),
         "evidence": None,
         "processing_time_ms": processing_time_ms
     }
@@ -31,7 +31,7 @@ def build_early_exit_bilan(
 def build_full_bilan(
     score: int,
     verdict: str,
-    clip_score: float,
+    clip_score: dict,
     flags: List[str],
     blip_description: str,
     entities: Dict[str, List[str]],

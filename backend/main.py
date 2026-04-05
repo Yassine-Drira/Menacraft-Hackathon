@@ -87,14 +87,14 @@ async def verify(
             raise HTTPException(status_code=400, detail="Could not process media file")
 
         # CLIP early exit gate
-        clip_score = get_best_clip_score(frames, caption)
+        clip_score, best_frame_idx = get_best_clip_score(frames, caption)
 
         if should_early_exit(clip_score):
             processing_time = int((time.time() - start_time) * 1000)
             return JSONResponse(content=build_early_exit_bilan(clip_score, processing_time))
 
         # Full pipeline - find best frame for BLIP
-        best_frame = frames[0]  # Could be improved to use frame with highest CLIP score
+        best_frame = frames[best_frame_idx] if best_frame_idx >= 0 else frames[0]
 
         # Generate BLIP caption
         blip_description = generate_caption(best_frame)

@@ -52,7 +52,7 @@ def detect_overclaiming(entities: Dict[str, List[str]]) -> bool:
     return specific_claims >= 3
 
 
-def calculate_score(
+'''def calculate_score(
     clip_score: float,
     flags: List[str],
     entities: Dict[str, List[str]]
@@ -72,6 +72,22 @@ def calculate_score(
 
     total_penalty = sum(penalties.get(flag, 0) for flag in flags)
 
+    return max(0, base_score - total_penalty)'''
+
+def calculate_score(clip_score: dict, flags: List[str], entities: dict) -> int:
+    # Before: base_score = int(np.clip(clip_score * 100, 0, 100))
+    # After:
+    base_score = clip_score["display"]   # already 0–100, properly normalized
+
+    penalties = {
+        "location_mismatch":           25,
+        "temporal_claim_unverifiable": 15,
+        "event_type_mismatch":         30,
+        "overclaiming_specificity":    10,
+        "evidence_contradicts_claim":  15
+    }
+
+    total_penalty = sum(penalties.get(flag, 0) for flag in flags)
     return max(0, base_score - total_penalty)
 
 

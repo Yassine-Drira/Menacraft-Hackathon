@@ -34,7 +34,7 @@ def test_constants():
         from pipeline.ingest import SUPPORTED_IMAGE_TYPES, SUPPORTED_VIDEO_TYPES, MAX_FILE_SIZE
         assert SUPPORTED_IMAGE_TYPES == {'image/jpeg', 'image/png', 'image/webp'}
         assert SUPPORTED_VIDEO_TYPES == {'video/mp4', 'video/quicktime'}
-        assert MAX_FILE_SIZE == 50 * 1024 * 1024  # 50MB
+        assert MAX_FILE_SIZE == 100 * 1024 * 1024  # 100MB
         print("✓ Constants are correctly defined")
         return True
     except Exception as e:

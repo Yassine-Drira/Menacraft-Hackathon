@@ -3,6 +3,10 @@ function AnalysisDetail({ result }) {
     return null; // Don't show analysis detail for early exit
   }
 
+  const clipScoreValue = typeof result.clip_score === 'number'
+    ? result.clip_score
+    : (result.clip_score?.normalized ?? (result.clip_score?.display ?? 0) / 100);
+
   return (
     <section className="analysis-section">
       <h3>Analysis Details</h3>
@@ -14,10 +18,10 @@ function AnalysisDetail({ result }) {
             <div className="clip-bar">
               <div
                 className="clip-fill"
-                style={{ width: `${result.clip_score * 100}%` }}
+                style={{ width: `${clipScoreValue * 100}%` }}
               ></div>
             </div>
-            <span className="clip-value">{result.clip_score.toFixed(2)}</span>
+            <span className="clip-value">{clipScoreValue.toFixed(2)}</span>
           </div>
         </div>
 

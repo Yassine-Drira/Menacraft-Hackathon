@@ -10,7 +10,7 @@ from fastapi import HTTPException, UploadFile
 # Supported file types
 SUPPORTED_IMAGE_TYPES = {"image/jpeg", "image/png", "image/webp"}
 SUPPORTED_VIDEO_TYPES = {"video/mp4", "video/quicktime"}
-MAX_FILE_SIZE = 50 * 1024 * 1024  # 50MB
+MAX_FILE_SIZE = 100 * 1024 * 1024  # 100MB
 
 
 def validate_file(file: UploadFile) -> None:

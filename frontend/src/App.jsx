@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import UploadForm from './components/UploadForm';
 import LoadingState from './components/LoadingState';
 import VerdictHeader from './components/VerdictHeader';
@@ -13,6 +13,31 @@ function App() {
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+
+  useEffect(() => {
+    const syncLatestResult = async () => {
+      try {
+        const response = await fetch(`${API_URL}/results/latest`);
+        if (!response.ok) {
+          return;
+        }
+
+        const data = await response.json();
+        setResult((prev) => {
+          if (!prev || data.timestamp > prev.timestamp) {
+            return data;
+          }
+          return prev;
+        });
+      } catch (err) {
+        // Ignore transient sync failures
+      }
+    };
+
+    syncLatestResult();
+    const interval = setInterval(syncLatestResult, 2000);
+    return () => clearInterval(interval);
+  }, []);
 
   const handleVerification = async (file, caption, searchEnabled) => {
     setError('');

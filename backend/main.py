@@ -32,6 +32,9 @@ app = FastAPI(
     version="1.0.0"
 )
 
+# Store the most recent verification result for automatic UI sync
+latest_verification_result = None
+
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
@@ -60,6 +63,14 @@ async def health_check():
     }
 
 
+@app.get("/results/latest")
+async def get_latest_result():
+    """Return the latest verification result for UI synchronization."""
+    if latest_verification_result is None:
+        raise HTTPException(status_code=404, detail="No verification results available")
+    return latest_verification_result
+
+
 @app.post("/verify")
 async def verify(
     media: UploadFile = File(...),
@@ -71,6 +82,7 @@ async def verify(
     Accepts media file + caption and returns consistency analysis.
     """
     start_time = time.time()
+    global latest_verification_result
 
     try:
         # Validate inputs
@@ -91,7 +103,10 @@ async def verify(
 
         if should_early_exit(clip_score):
             processing_time = int((time.time() - start_time) * 1000)
-            return JSONResponse(content=build_early_exit_bilan(clip_score, processing_time))
+            result = build_early_exit_bilan(clip_score, processing_time)
+            result["timestamp"] = time.time()
+            latest_verification_result = result
+            return JSONResponse(content=result)
 
         # Full pipeline - find best frame for BLIP
         best_frame = frames[best_frame_idx] if best_frame_idx >= 0 else frames[0]
@@ -124,6 +139,8 @@ async def verify(
             evidence=evidence,
             processing_time_ms=processing_time
         )
+        bilan["timestamp"] = time.time()
+        latest_verification_result = bilan
 
         return JSONResponse(content=bilan)
 

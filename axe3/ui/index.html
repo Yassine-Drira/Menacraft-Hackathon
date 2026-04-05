@@ -1,0 +1,465 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ClipTrust Source Analyzer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Manrope:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f2efe9;
+      --card: #fffdfa;
+      --ink: #1c1a17;
+      --muted: #6e665c;
+      --ok: #0d7a4d;
+      --warn: #b26800;
+      --bad: #b42318;
+      --line: #ddd4c8;
+      --accent: #0f766e;
+      --shadow: 0 14px 40px rgba(33, 24, 14, 0.12);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Manrope, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 10% 20%, #f9dec6 0, transparent 35%),
+        radial-gradient(circle at 90% 80%, #c6e5db 0, transparent 35%),
+        var(--bg);
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 28px 18px 42px;
+    }
+
+    .hero {
+      background: linear-gradient(120deg, #1f2a2e, #2f2f26);
+      color: #f8f4ea;
+      border-radius: 18px;
+      padding: 26px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero h1 {
+      margin: 0;
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 1.9rem;
+      letter-spacing: 0.4px;
+    }
+
+    .hero p {
+      margin: 8px 0 0;
+      color: #d6d1c7;
+    }
+
+    .grid {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap: 16px;
+    }
+
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 18px;
+      box-shadow: 0 8px 22px rgba(20, 16, 10, 0.06);
+    }
+
+    h2 {
+      margin-top: 0;
+      margin-bottom: 12px;
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 1.15rem;
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 6px;
+      font-size: 0.92rem;
+    }
+
+    input, textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 10px 11px;
+      font: inherit;
+      background: #fff;
+      color: var(--ink);
+    }
+
+    textarea { min-height: 84px; resize: vertical; }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .mt { margin-top: 12px; }
+
+    .btn {
+      border: 0;
+      background: linear-gradient(120deg, #0f766e, #155e75);
+      color: #f3f9f8;
+      border-radius: 11px;
+      padding: 11px 14px;
+      font-weight: 700;
+      cursor: pointer;
+      width: 100%;
+      transition: transform .18s ease, box-shadow .18s ease;
+      box-shadow: 0 9px 22px rgba(12, 76, 71, 0.24);
+    }
+
+    .btn:hover { transform: translateY(-1px); }
+
+    details {
+      border: 1px dashed var(--line);
+      border-radius: 10px;
+      padding: 8px 10px;
+      margin-top: 12px;
+    }
+
+    summary {
+      cursor: pointer;
+      font-weight: 700;
+      color: #3d3a34;
+    }
+
+    .badge {
+      display: inline-block;
+      margin-top: 10px;
+      font-size: 0.8rem;
+      color: #4f4a44;
+      background: #f3ebe0;
+      border-radius: 999px;
+      padding: 5px 9px;
+    }
+
+    .score-wrap {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .score {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: #ece6dc;
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 2rem;
+      font-weight: 700;
+    }
+
+    .score.ok { color: var(--ok); border: 5px solid #9ad3bb; }
+    .score.warn { color: var(--warn); border: 5px solid #e8ce9b; }
+    .score.bad { color: var(--bad); border: 5px solid #efb2ac; }
+
+    .verdict {
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 1.3rem;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+    }
+
+    ul {
+      margin: 10px 0 0;
+      padding-left: 18px;
+    }
+
+    li { margin-bottom: 6px; color: #3f3a34; }
+
+    .muted { color: var(--muted); font-size: 0.9rem; }
+
+    @media (max-width: 900px) {
+      .grid { grid-template-columns: 1fr; }
+      .row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <section class="hero">
+      <h1>ClipTrust • Source Credibility</h1>
+      <p>Analyze reel links, news URLs, or social profiles with explainable risk flags.</p>
+    </section>
+
+    <section class="grid">
+      <article class="panel">
+        <h2>Analyze Source</h2>
+        <label for="url">Reel / Post URL</label>
+        <input id="url" type="text" placeholder="https://www.instagram.com/reel/... or any social post link">
+
+        <details>
+          <summary style="color: #666;">Advanced evidence (optional)</summary>
+          <div class="mt">
+            <label for="handle">Handle (optional)</label>
+            <input id="handle" type="text" placeholder="bbcnews">
+          </div>
+
+          <div class="row mt">
+            <div>
+              <label for="age">Account age (days)</label>
+              <input id="age" type="number" min="0">
+            </div>
+            <div>
+              <label for="posts">Posts count</label>
+              <input id="posts" type="number" min="0">
+            </div>
+          </div>
+
+          <div class="row mt">
+            <div>
+              <label for="followers">Followers</label>
+              <input id="followers" type="number" min="0">
+            </div>
+            <div>
+              <label for="following">Following</label>
+              <input id="following" type="number" min="0">
+            </div>
+          </div>
+
+          <div class="row mt">
+            <div>
+              <label for="engagement">Engagement rate (0-1)</label>
+              <input id="engagement" type="number" min="0" max="1" step="0.001">
+            </div>
+            <div>
+              <label for="freq">Posting frequency/day</label>
+              <input id="freq" type="number" min="0" step="0.1">
+            </div>
+          </div>
+
+          <div class="mt">
+            <label for="texts">Caption samples (one per line)</label>
+            <textarea id="texts" placeholder="Paste 3+ recent captions or posts..."></textarea>
+          </div>
+        </details>
+
+        <div class="mt">
+          <button class="btn" id="runBtn">Analyze Now</button>
+          <div class="badge" id="apiHint">Checking API connection...</div>
+        </div>
+      </article>
+
+      <article class="panel" id="resultPanel">
+        <h2>Result</h2>
+        <p class="muted">Submit a URL to get score, verdict, and explainable flags.</p>
+      </article>
+    </section>
+  </div>
+
+  <script>
+    const byId = (id) => document.getElementById(id);
+    const apiHost = window.location.hostname || "localhost";
+    const API_BASE =
+      window.location.protocol === "http:" || window.location.protocol === "https:"
+        ? `${window.location.protocol}//${apiHost}:8002`
+        : "http://localhost:8002";
+
+    function toNumber(v) {
+      if (v === "" || v == null) return null;
+      const n = Number(v);
+      return Number.isFinite(n) ? n : null;
+    }
+
+    function verdictClass(v) {
+      if (v === "authentic") return "ok";
+      if (v === "suspicious") return "warn";
+      return "bad";
+    }
+
+    function classifyConfidence(flags) {
+      const confidenceReducers = (flags || []).filter((f) =>
+        /(unavailable|limited evidence|partial social profile|could not infer|scraping limited)/i.test(f)
+      );
+      if (confidenceReducers.length >= 3) return "Low";
+      if (confidenceReducers.length >= 1) return "Medium";
+      return "High";
+    }
+
+    function buildReasoning(flags, verdict, score, confidenceFromApi) {
+      const allFlags = flags || [];
+      const highRisk = allFlags.filter((f) =>
+        /(mimics known brand|suspicious tld|clickbait|could not connect|bad list|invalid|typosquat)/i.test(f)
+      );
+      const confidence =
+        Number.isFinite(confidenceFromApi) && confidenceFromApi >= 0
+          ? `${confidenceFromApi}/100`
+          : classifyConfidence(allFlags);
+      const primary =
+        highRisk[0] ||
+        (verdict === "authentic"
+          ? "No critical URL-level risk indicators were triggered."
+          : "Multiple moderate signals reduced trust.");
+
+      return {
+        primary,
+        confidence,
+        summary:
+          highRisk.length > 1
+            ? `Key risk drivers: ${highRisk.slice(0, 2).join("; ")}`
+            : `Score ${score} reflects the current evidence quality and risk signals.`
+      };
+    }
+
+    function buildActionPlan(flags, url) {
+      const f = flags || [];
+      const suggestions = [];
+
+      const social = /(instagram\.com|tiktok\.com|x\.com|twitter\.com)/i.test(url || "");
+      if (social && f.some((x) => /could not infer instagram publisher handle/i.test(x))) {
+        suggestions.push("Add the creator handle manually in Advanced evidence to unlock account-level scoring.");
+      }
+      if (f.some((x) => /account statistics unavailable|partial social profile data/i.test(x))) {
+        suggestions.push("Provide 3 fields minimum: followers, following, and posts count for stronger trust confidence.");
+      }
+      if (f.some((x) => /writing style unavailable|need at least 3 texts/i.test(x))) {
+        suggestions.push("Paste at least 3 recent captions in Advanced evidence to activate style-consistency analysis.");
+      }
+      if (f.some((x) => /could not connect|timed out/i.test(x))) {
+        suggestions.push("Retry in a few seconds; domain connectivity issues can temporarily lower confidence.");
+      }
+      if (f.some((x) => /mimics known brand|suspicious tld|clickbait/i.test(x))) {
+        suggestions.push("Treat this source as high-risk and cross-check against at least two established outlets.");
+      }
+
+      if (!suggestions.length) {
+        suggestions.push("No urgent action needed. For maximum confidence, still add account stats and 3 sample captions.");
+      }
+
+      return suggestions.slice(0, 3);
+    }
+
+    function renderResult(data) {
+      const cls = verdictClass(data.verdict);
+      const flags = (data.flags || []).map((f) => `<li>${f}</li>`).join("");
+      const reasoning = buildReasoning(data.flags, data.verdict, data.score, data.confidence);
+      const actions = buildActionPlan(data.flags, byId("url").value.trim())
+        .map((a) => `<li>${a}</li>`)
+        .join("");
+      byId("resultPanel").innerHTML = `
+        <h2>Result</h2>
+        <div class="score-wrap">
+          <div class="score ${cls}">${data.score}</div>
+          <div>
+            <div class="verdict">${data.verdict}</div>
+            <div class="muted">Axis: ${data.axis}</div>
+            <div class="muted">Confidence: ${reasoning.confidence}</div>
+          </div>
+        </div>
+        <h3>Reasoning Summary</h3>
+        <ul>
+          <li><strong>Primary driver:</strong> ${reasoning.primary}</li>
+          <li><strong>Interpretation:</strong> ${reasoning.summary}</li>
+        </ul>
+        <h3>Smart Next Steps</h3>
+        <ul>${actions}</ul>
+        <h3>Why?</h3>
+        <ul>${flags || "<li>No flags reported</li>"}</ul>
+      `;
+    }
+
+    function renderError(msg) {
+      byId("resultPanel").innerHTML = `
+        <h2>Result</h2>
+        <p style="color:#b42318;font-weight:700;">${msg}</p>
+      `;
+    }
+
+    async function run() {
+      const url = byId("url").value.trim();
+      if (!url) {
+        renderError("URL is required.");
+        return;
+      }
+
+      const account = {
+        account_age_days: toNumber(byId("age").value),
+        followers_count: toNumber(byId("followers").value),
+        following_count: toNumber(byId("following").value),
+        posts_count: toNumber(byId("posts").value),
+        engagement_rate: toNumber(byId("engagement").value),
+        posting_frequency_per_day: toNumber(byId("freq").value)
+      };
+
+      const hasAccount = Object.values(account).some((v) => v !== null);
+      const texts = byId("texts").value
+        .split("\n")
+        .map((t) => t.trim())
+        .filter(Boolean);
+
+      const payload = { url };
+      const handle = byId("handle").value.trim();
+      if (handle) payload.handle = handle;
+      if (hasAccount) payload.account = account;
+      if (texts.length) payload.texts = texts;
+
+      try {
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), 25000);
+        const res = await fetch(`${API_BASE}/analyze/source`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+          signal: controller.signal
+        });
+        clearTimeout(timer);
+
+        const raw = await res.text();
+        let body = {};
+        try {
+          body = raw ? JSON.parse(raw) : {};
+        } catch (parseErr) {
+          renderError(`API returned non-JSON response (HTTP ${res.status}).`);
+          return;
+        }
+
+        if (!res.ok) {
+          renderError(body.detail || `API error ${res.status}: ${res.statusText}`);
+          return;
+        }
+
+        if (typeof body.score !== "number" || !body.verdict) {
+          renderError("API response is missing required fields (score/verdict).");
+          return;
+        }
+        renderResult(body);
+      } catch (err) {
+        if (err && err.name === "AbortError") {
+          renderError(`API timeout after 25s at ${API_BASE}. Try again or check backend logs.`);
+          return;
+        }
+        renderError(`Could not reach API server at ${API_BASE}. Ensure backend is running on port 8002.`);
+      }
+    }
+
+    async function checkApiStatus() {
+      try {
+        const res = await fetch(`${API_BASE}/health`);
+        if (!res.ok) throw new Error("Health check failed");
+        byId("apiHint").textContent = `API connected: ${API_BASE}`;
+      } catch (err) {
+        byId("apiHint").textContent = `API not connected: ${API_BASE}`;
+      }
+    }
+
+    byId("runBtn").addEventListener("click", run);
+    checkApiStatus();
+  </script>
+</body>
+</html>

@@ -1,2 +1,0 @@
-# Menacraft-Hackathon
-That'it  

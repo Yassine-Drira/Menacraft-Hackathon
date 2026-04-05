@@ -1,0 +1,28 @@
+[
+  {"url": "https://bbc.com", "expected": "authentic"},
+  {"url": "https://www.bbc.com", "expected": "authentic"},
+  {"url": "https://reuters.com", "expected": "authentic"},
+  {"url": "https://apnews.com", "expected": "authentic"},
+  {"url": "https://www.theguardian.com", "expected": "authentic"},
+  {"url": "https://www.nytimes.com", "expected": "authentic"},
+  {"url": "https://www.washingtonpost.com", "expected": "authentic"},
+  {"url": "https://techcrunch.com", "expected": "authentic"},
+  {"url": "https://wired.com", "expected": "authentic"},
+  {"url": "https://instagram.com/instagram", "expected": "authentic"},
+  {"url": "https://www.tiktok.com/@tiktok", "expected": "authentic"},
+  {"url": "https://x.com/TwitterAPI", "expected": "suspicious"},
+
+  {"url": "https://bbc-news-live.com", "expected": "fake"},
+  {"url": "https://bbcnews-updates.net", "expected": "suspicious"},
+  {"url": "https://cnn-breaking-now.com", "expected": "fake"},
+  {"url": "https://reuters-world-alerts.net", "expected": "fake"},
+  {"url": "https://nytimes-live-today.xyz", "expected": "fake"},
+  {"url": "http://breaking-news-update.xyz", "expected": "suspicious"},
+  {"url": "http://secure-verify-support-login.com", "expected": "suspicious"},
+  {"url": "http://world-news-click-now.xyz", "expected": "fake"},
+
+  {"url": "8.8.8.8", "expected": "fake"},
+  {"url": "localhost", "expected": "fake"},
+  {"url": "http://obvious-phishing-site.net", "expected": "suspicious"},
+  {"url": "http://suspicious-news.com", "expected": "suspicious"}
+]
